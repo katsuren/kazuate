@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
+          xmlns:mx="library://ns.adobe.com/flex/mx"
+          width="40" height="40"
+          horizontalAlign="center"
+          verticalAlign="middle"
+          creationComplete="{creationCompleteHandler();}"
+          resize="{resizeHandler();}"
+          >
+
+  <fx:Script>
+    <![CDATA[
+      [Bindable]
+      public function get selected():Boolean
+      {
+        return _selected;
+      }
+      public function set selected(value:Boolean):void
+      {
+        _selected = value;
+        var color:uint = value ? 0xFF3333 : 0xBABABA;
+        initializeView(color);
+      }
+      private var _selected:Boolean = false;
+
+      [Bindable]
+      public var text:String = "0";
+
+      [Bindable]
+      public var index:int;
+
+      protected function creationCompleteHandler():void
+      {
+        initializeView();
+      }
+
+      protected function resizeHandler():void
+      {
+        initializeView();
+      }
+
+      protected function initializeView(color:uint=0xBABABA):void
+      {
+        var w:Number = this.width == 0 ? 40 : this.width;
+        var h:Number = this.height == 0 ? 40 : this.height;
+        graphics.clear();
+        graphics.beginFill(color);
+        graphics.drawRect(0,0,w,h);
+        graphics.endFill();
+        graphics.lineStyle(1);
+        graphics.drawRect(0,0,w,h);
+      }
+    ]]>
+  </fx:Script>
+
+  <s:Label text="{text}" />
+      
+
+</s:VGroup>

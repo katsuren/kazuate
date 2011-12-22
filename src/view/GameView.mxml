@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
+          xmlns:mx="library://ns.adobe.com/flex/mx"
+          xmlns:model="model.*"
+          xmlns:comp="components.*"
+          width="100%" height="100%"
+          horizontalAlign="center"
+          verticalAlign="middle"
+          >
+  
+  <fx:Script>
+    <![CDATA[
+      import flash.events.Event;
+      import flash.events.MouseEvent;
+      import managers.SystemManager;
+      import components.NumberPicker;
+      import components.Input;
+
+      protected var sm:SystemManager = new SystemManager();
+      protected var picker:NumberPicker = new NumberPicker();
+      protected var selectedInput:Input;
+
+      protected function input_clickHandler(e:MouseEvent):void
+      {
+        selectedInput = e.currentTarget as Input;
+        selectedInput.selected = true;
+        sm.setModal(true);
+        sm.getRootApplication()["popupContainer"]["addElement"](picker);
+        picker.addEventListener(Event.SELECT, picker_selectHandler);
+      }
+
+      protected function picker_selectHandler(e:Event):void
+      {
+        selectedInput.text = picker.selectedString;
+        selectedInput.selected = false;
+        kazuate.setInput(selectedInput.index, selectedInput.text);
+        selectedInput = null;
+        picker.removeEventListener(Event.SELECT, picker_selectHandler);
+        sm.setModal(false);
+        sm.getRootApplication()["popupContainer"]["removeElement"](picker);
+      }
+    ]]>
+  </fx:Script>
+
+  <fx:Declarations>
+    <model:Kazuate id="kazuate" />
+  </fx:Declarations>
+
+  <s:Label text="{kazuate.answerString}" />
+  <s:Button 
+      label="スタート"
+      click="{kazuate.start();}" />
+  <s:HGroup
+      width="100%" height="40"
+      horizontalAlign="center"
+      verticalAlign="middle"
+      >
+    <comp:Input
+        index="0"
+        click="{input_clickHandler(event);}" />
+    <comp:Input
+        index="1"
+        click="{input_clickHandler(event);}" />
+    <comp:Input
+        index="2"
+        click="{input_clickHandler(event);}" />
+    <s:Label id="checkResultLabel" text="{kazuate.resultString}" />
+  </s:HGroup>
+  <s:Button
+      label="チェック"
+      click="{kazuate.checkAnswer();}" />
+
+  <mx:Spacer height="350" />
+
+</s:VGroup>

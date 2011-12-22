@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
+          xmlns:mx="library://ns.adobe.com/flex/mx"
+          width="100%" height="100%"
+          horizontalAlign="center"
+          verticalAlign="middle"
+          creationComplete="{creationCompleteHandler()}"
+          >
+
+  <fx:Script>
+    <![CDATA[
+      import flash.events.Event;
+      import flash.events.MouseEvent;
+      import spark.components.Button;
+
+      [Event (name="select", type="flash.events.Event")]
+
+      [Bindable]
+      public var selectedString:String;
+
+      protected function creationCompleteHandler():void
+      {
+        panel.graphics.clear();
+        panel.graphics.beginFill(0x787878);
+        panel.graphics.drawRect(0,0,160,200);
+        //panel.graphics.drawRect(0,0,panel.width,panel.height);
+      }
+
+      protected function clickHandler(e:MouseEvent):void
+      {
+        selectedString = Button(e.currentTarget).label;
+        dispatchEvent(new Event(Event.SELECT));
+      }
+    ]]>
+  </fx:Script>
+  <s:VGroup id="panel"
+      width="160" height="200"
+      horizontalAlign="center"
+      verticalAlign="middle"
+      >
+    <s:HGroup
+        width="100%" height="40"
+        horizontalAlign="center"
+        verticalAlign="middle"
+        >
+      <s:Button
+          label="1"
+          width="40" height="40"
+          click="clickHandler(event)" />
+      <s:Button
+          label="2"
+          width="40" height="40"
+          click="clickHandler(event)" />
+      <s:Button
+          label="3"
+          width="40" height="40"
+          click="clickHandler(event)" />
+    </s:HGroup>
+    <s:HGroup
+        width="100%" height="40"
+        horizontalAlign="center"
+        verticalAlign="middle"
+        >
+      <s:Button
+          label="4"
+          width="40" height="40"
+          click="clickHandler(event)" />
+      <s:Button
+          label="5"
+          width="40" height="40"
+          click="clickHandler(event)" />
+      <s:Button
+          label="6"
+          width="40" height="40"
+          click="clickHandler(event)" />
+    </s:HGroup>
+    <s:HGroup
+        width="100%" height="40"
+        horizontalAlign="center"
+        verticalAlign="middle"
+        >
+      <s:Button
+          label="7"
+          width="40" height="40"
+          click="clickHandler(event)" />
+      <s:Button
+          label="8"
+          width="40" height="40"
+          click="clickHandler(event)" />
+      <s:Button
+          label="9"
+          width="40" height="40"
+          click="clickHandler(event)" />
+    </s:HGroup>
+    <s:HGroup
+        width="100%" height="40"
+        horizontalAlign="center"
+        verticalAlign="middle"
+        >
+      <mx:Spacer width="40" />
+      <mx:Spacer width="40" />
+      <s:Button
+          label="0"
+          width="40" height="40"
+          click="clickHandler(event)" />
+    </s:HGroup>
+  </s:VGroup>
+
+</s:VGroup>
