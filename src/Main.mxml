@@ -5,37 +5,9 @@
                xmlns:model="model.*"
                xmlns:view="view.*"
                currentState="game"
-               applicationComplete="{applicationCompleteHandler();}"
 							 width="800" height="600"
 							 >
-	
-  <fx:Script>
-    <![CDATA[
-      import managers.SystemManager;
 
-      protected var sm:SystemManager;
-
-      protected function applicationCompleteHandler():void
-      {
-        sm = new SystemManager();
-        sm.setRootApplication(this);
-      }
-
-      public function setModal(value:Boolean):void
-      {
-        modalScreen.visible = value;
-        modalScreen.graphics.clear();
-        modalScreen.width = width;
-        modalScreen.height = height;
-        if (value)
-        {
-          modalScreen.graphics.beginFill(0x000000, 0.3);
-          modalScreen.graphics.drawRect(0,0,width,height);
-        }
-      }
-    ]]>
-  </fx:Script>
-  
 	<fx:Declarations>
 		<model:Kazuate id="kazuate" inputSize="3" />
 	</fx:Declarations>
@@ -49,12 +21,5 @@
   <view:GameView
       kazuate="{kazuate}"
       includeIn="game" />
-
-  <mx:UIComponent id="modalScreen" />
-
-  <s:VGroup id="popupContainer"
-      width="100%" height="100%"
-      horizontalAlign="center"
-      verticalAlign="middle" />
 
 </s:Application>
