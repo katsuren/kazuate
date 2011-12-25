@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
+          xmlns:mx="library://ns.adobe.com/flex/mx"
+          width="40" height="40"
+          horizontalAlign="center"
+          verticalAlign="middle"
+          preinitialize="{preinitializeHandler()}"
+          creationComplete="{creationCompleteHandler()}"
+          click="{clickHandler()}"
+          >
+
+  <fx:Script>
+    <![CDATA[
+      import components.AbstractSelector;
+      import components.TenkeySelector;
+      import managers.PopupManager;
+
+      //--------------------------------
+      // Constants
+      //--------------------------------
+      public static const PICKER_TYPE_TENKEY:int    = 0;
+//      public static const PICKER_TYPE_STRING:int    = 1;
+
+
+      //--------------------------------
+      // Properties
+      //--------------------------------
+      private var popupManager:PopupManager = new PopupManager();
+
+      public function get type():int
+      {
+        return _type;
+      }
+      public function set type(value:int):void
+      {
+        if (value != _type)
+        {
+          switch (value)
+          {
+            case PICKER_TYPE_TENKEY:
+              selector = new TenkeySelector();
+              break;
+  //          case PICKER_TYPE_STRING:
+  //            break;
+            default:
+              throw new Error("unko type");
+              break;
+          }
+        }
+      }
+      private var _type:int = -1;
+
+      [Bindable ("selectorChanged")]
+      private function get selector():AbstractSelector
+      {
+        return _selector;
+      }
+      private function set selector(value:AbstractSelector):void
+      {
+        if (!value)
+        {
+          throw new Error("unko selector");
+        }
+        if (_selector)
+        {
+          _selector.removeEventListener(
+                      Event.SELECT,
+                      selector_selectHandler);
+          _selector.removeEventListener(
+                      "selectedLabelChanged",
+                      selector_selectedLabelChangedHandler);
+        }
+        _selector = value;
+        _selector.addEventListener(
+                    Event.SELECT,
+                    selector_selectHandler);
+        _selector.addEventListener(
+                    "selectedLabelChanged",
+                    selector_selectedLabelChangedHandler);
+        var event:Event = new Event("selectorChanged");
+        dispatchEvent(event);
+      }
+      private var _selector:AbstractSelector;
+
+      [Bindable ("selectedLabelChanged")]
+      public function get selectedLabel():String
+      {
+        return selector.selectedLabel;
+      }
+      public function set selectedLabel(value:String):void
+      {
+        selector.selectedLabel = value;
+      }
+
+      [Bindable]
+      public function get selected():Boolean
+      {
+        return _selected;
+      }
+      public function set selected(value:Boolean):void
+      {
+        _selected = value;
+        var color:uint = value ? 0xFF3333 : 0xBABABA;
+        updateView(color);
+
+        if (value)
+        {
+          popupManager.addPopup(selector, this, true);
+        }
+        else
+        {
+          popupManager.removePopup(selector);
+        }
+      }
+      private var _selected:Boolean = false;
+
+
+      //--------------------------------
+      // Functions
+      //--------------------------------
+      private function updateView(color:uint=0xBABABA):void
+      {
+        var w:Number = this.width == 0 ? 40 : this.width;
+        var h:Number = this.height == 0 ? 40 : this.height;
+        graphics.clear();
+        graphics.beginFill(color);
+        graphics.drawRect(0,0,w,h);
+        graphics.endFill();
+        graphics.lineStyle(1);
+        graphics.drawRect(0,0,w,h);
+      }
+
+
+      //--------------------------------
+      // Event handlers
+      //--------------------------------
+      private function preinitializeHandler():void
+      {
+        type = PICKER_TYPE_TENKEY;
+      }
+
+      private function creationCompleteHandler():void
+      {
+        selectedLabel = "0";
+        updateView();
+      }
+
+      private function resizeHandler():void
+      {
+        updateView();
+      }
+
+      private function selector_selectHandler(e:Event):void
+      {
+        selected = false;
+      }
+
+      private function selector_selectedLabelChangedHandler(e:Event):void
+      {
+        dispatchEvent(e.clone());
+      }
+
+      private function clickHandler():void
+      {
+        selected = true;
+      }
+    ]]>
+  </fx:Script>
+
+    <mx:Label text="{selector.selectedLabel}" textAlign="center" />
+
+</s:VGroup>
